@@ -164,6 +164,24 @@
         $('#btnB').prop('disabled', false);
         $('#btnC').prop('disabled', false);
         
+        $("#btnA").css("font-family","cursive");
+        $("#btnB").css("font-family","cursive");
+        $("#btnC").css("font-family","cursive");
+
+
+       
+        $("#btnA").css("background-color","yellow");
+        $("#btnB").css("background-color","green");
+        $("#btnC").css("background-color","black");
+
+        $("#btnA").html("Start▶<br>(開始)");
+        $("#btnB").html("Stop■<br>(終了)");
+        $("#btnC").html("Set<br>(セット)");
+        
+        
+
+        btnCClick(null);
+        
     }
 
     // Alarmの処理
@@ -178,21 +196,29 @@
          var audio = new Audio();
          audio.src = "pin.wav";
          audio.play();
-        
+
+
+
+         
         
     }
     
     // ButtonAがクリックされた時の処理
     function btnAClick(e){
         active = true;
-        startTime = new Date();  
+        alarm();
         
-        
+        startTime = new Date();
+        $("#btnA").prop("disabled",true); 
+        $("#btnB").prop("disabled",false);          
     }
 
     // ButtonBがクリックされた時の処理
     function btnBClick(e){
-        active = false; 
+        active = false;
+        
+        
+      
         
         
     }
@@ -203,6 +229,10 @@
         period = 60* parseInt( $("#minute").val() )+parseInt( $("#second").val() );
         $("#time").html("経過時間： 0");
         $("#remain").html("残り時間： " + period);
+        $("#btnA").prop("disabled",false);
+        $("#btnB").prop("disabled",true);
+
+        $("#btnA").css("background-color","yellow");
         
     }
     
@@ -212,6 +242,23 @@
         if (active) { 
             etime = parseInt( (new Date() - startTime)/1000 ); 
             rest = period - etime;
+            var m = parseInt(rest/60);
+            var s = parseInt(rest-m*60);
+            var mstr = "分:";
+            for(var i=0; i<m; i++){
+                mstr +="〇";
+            }
+            $("#minuteStr").html(mstr);
+            var sstr = "秒:";
+            for(var i=0; i<s; i++){
+                sstr +="〇";
+            }
+            $("#secondStr").html(sstr);
+
+            if(rest<=60){
+                $("#btnA").css("background-color","red");
+            } 
+
             $("#time").html("経過時間： " + etime);
             $("#remain").html("残り時間： " + rest);
             analog(rest);
@@ -237,8 +284,11 @@
     <div id="time">Time</div>
     <button id="btnA">Start</button>  
     <button id="btnB">Stop</button>  
-    <button id="btnC">Set</button>  
-    <input type="number" id="minute" value=0 >
-    <input type="number" id="second" value=15 >
+    <button id="btnC">Set</button>
+   
+
+
+    <input type="number" id="minute" value=3 >
+    <input type="number" id="second" value=0 >
 </body>
 </html>
